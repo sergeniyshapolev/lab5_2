@@ -12,8 +12,8 @@ struct timer_list timer;
 static void hello(unsigned long arg) 
 {
 	printk(KERN_INFO "hello world!\n");
-	timer.expires = jiffies + HZ*delay;
-	add_timer (&timer);
+	timer.expires = jiffies + HZ * delay;
+	add_timer(&timer);
 }
 
 static ssize_t show(struct kobject *kobj,
@@ -27,9 +27,9 @@ static ssize_t store(struct kobject *kobj,
 {
 	int tmp = 0;
 	sscanf(buf, "%du", &tmp);
-	if(tmp > 0) {
-		if(delay < 0) {
-			init_timer (&timer);
+	if (tmp > 0) {
+		if (delay < 0) {
+			init_timer(&timer);
 			timer.function = hello;
 			timer.data = 0;
 			hello(0);
@@ -48,14 +48,14 @@ static int __init example_init(void)
 	kobj = kobject_create_and_add("hello", NULL);
 	if (!kobj)
 		return - ENOMEM;
-	if(sysfs_create_file(kobj, &sc_attrb.attr)) 
+	if (sysfs_create_file(kobj, &sc_attrb.attr)) 
 		kobject_put(kobj);
 	return 0;
 }
 
 static void __exit example_exit(void)
 {
-	del_timer (&timer);
+	del_timer(&timer);
 	sysfs_remove_file(kobj, &sc_attrb.attr);
 	kobject_put(kobj);
 }
